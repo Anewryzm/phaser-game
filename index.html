@@ -38,6 +38,8 @@ function preload() {
 	var cursors;
 
 	var stars;
+	var score = 0;
+	var scoreText;
 
 //función de inicio de creación del juego
 function create() {
@@ -113,6 +115,9 @@ function create() {
 
 	};
 
+	// Agregamos un contador de puntaje en la posicion x:16 y:16
+	scoreText = game.add.text(16,16, 'score:0',{fontSize: "32px", fill: "#000"});
+
 
 	// Agregamos los controles para nuestro jugador
 	// 'up', 'down', 'left', 'right' están establecidas por defecto
@@ -169,6 +174,12 @@ function collectStar(player,star){
 	// eliminamos a la estrella en contacto
 
 	star.kill();
+
+	// Actualizamos el puntaje
+	score += 10;
+	scoreText.content = "Score: " + score;
+	console.log(scoreText)
+
 }
 
 </script>
