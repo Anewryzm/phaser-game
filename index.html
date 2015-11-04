@@ -37,6 +37,8 @@ function preload() {
 	var platforms;
 	var cursors;
 
+	var stars;
+
 //función de inicio de creación del juego
 function create() {
 	// Para poder utilizar física en nuestro juego
@@ -88,6 +90,30 @@ function create() {
 	player.animations.add('left', [0,1,2,3], 10, true);
 	player.animations.add('right', [5,6,7,8], 10, true);
 
+	// Creacion de las estrellas
+	// Agrupamos las estrellas
+	stars = game.add.group();
+
+	// Activamos la física de las estrellas
+	stars.enableBody = true;
+
+	// Creamos una iteración para crear doce estrellas
+	for (var i = 0; i < 12; i++) {
+		// Creamos estrellas dentro del grupo correspondiente
+		// Conforme 'i' aumenta, la posición en x va aumentando
+		// de 70 en 70px
+		var star = stars.create(i*70, 0, "star");
+
+		// Dejamos a la gravedad hacer su trabajo
+		star.body.gravity.y = 6;
+
+		// Hacemos que las estrellas reboten de forma aleatoria
+		// con valores entre 0.7 y 0.9
+		star.body.bounce.y = 0.7 + Math.random()*0.2
+
+	};
+
+
 	// Agregamos los controles para nuestro jugador
 	// 'up', 'down', 'left', 'right' están establecidas por defecto
 
@@ -101,7 +127,11 @@ function update() {
 
 	// Hacemos que nuestro jugador haga colision con las plataformas y las estrellas
 	game.physics.collide(player, platforms);
-	// game.physics.collide(stars, platforms);
+	game.physics.collide(stars, platforms);
+
+	// Si el jugador se superpone con la estrellas llamamos
+	// a la funcion collectStar()
+	game.physics.overlap(player, stars, collectStar, null, this);
 
 	// Reseteamos la velocidad del jugador
 	player.body.velocity.x = 0;
@@ -132,6 +162,13 @@ function update() {
 		player.body.velocity.y = -350;
 	};
 
+}
+
+function collectStar(player,star){
+	// Cuando la funcion collectStar() es llamada
+	// eliminamos a la estrella en contacto
+
+	star.kill();
 }
 
 </script>
