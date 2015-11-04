@@ -92,6 +92,11 @@ function create() {
 
 //función llamada durante el juego, en cada frame
 function update() {
+
+	// Hacemos que nuestro jugador haga colision con las plataformas y las estrellas
+	game.physics.collide(player, platforms);
+	game.physics.collide(stars, platforms);
+
 }
 
 </script>
