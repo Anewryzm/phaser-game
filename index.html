@@ -35,6 +35,7 @@ function preload() {
 	// Variables locales
 	var player;
 	var platforms;
+	var cursors;
 
 //función de inicio de creación del juego
 function create() {
@@ -76,8 +77,8 @@ function create() {
 	// game.physics.arcade.enable(player);
 
 	// Algunas propiedades físicas del jugador.
-	player.body.bounce.y = 0.2;
-	player.body.gravity.y = 300;
+	player.body.bounce.y = 0.1;
+	player.body.gravity.y = 6;
 	player.body.collideWorldBounds = true;
 
 	// Establecemos las animaciones para nuestro jugador
@@ -87,6 +88,11 @@ function create() {
 	player.animations.add('left', [0,1,2,3], 10, true);
 	player.animations.add('right', [5,6,7,8], 10, true);
 
+	// Agregamos los controles para nuestro jugador
+	// 'up', 'down', 'left', 'right' están establecidas por defecto
+
+	cursors = game.input.keyboard.createCursorKeys();
+
 
 }
 
@@ -95,7 +101,36 @@ function update() {
 
 	// Hacemos que nuestro jugador haga colision con las plataformas y las estrellas
 	game.physics.collide(player, platforms);
-	game.physics.collide(stars, platforms);
+	// game.physics.collide(stars, platforms);
+
+	// Reseteamos la velocidad del jugador
+	player.body.velocity.x = 0;
+
+	// Si el control 'left' ha sido presionado
+	if (cursors.left.isDown) {
+		// El jugador se mueve a la izquierda
+		player.body.velocity.x = -150;
+		// El sprite 'left' se activa cuando el jugador se mueve hacia la izquierda
+		player.animations.play("left");
+	}
+	// Si el control 'right' ha sido presionado
+	else if(cursors.right.isDown){
+		// El jugador se mueve a la derecha
+		player.body.velocity.x = 150;
+		// El sprite 'right' se activa cuando el jugador se mueve hacia la derecha
+		player.animations.play("right");
+	}
+	else{
+		// Detenemos las animaciones
+		player.animations.stop();
+		// El frame 4 es la vista frontal del personaje
+		player.frame = 4;
+	}
+
+	// Activamos el salto del jugador siempre y cuando se encuentre en el suelo
+	if (cursors.up.isDown && player.body.touching.down) {
+		player.body.velocity.y = -350;
+	};
 
 }
 
