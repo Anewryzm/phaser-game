@@ -32,14 +32,42 @@ function preload() {
 	game.load.spritesheet("dude", "assets/dude.png", 32, 48);
 
 }
+	
+	var platforms;
 
 //función de inicio de creación del juego
 function create() {
+	// Para poder utilizar física en nuestro juego
+	// debemos activar el sistema de Física Arcade
+	// game.physics.startSystem(Phaser.Physics.ARCADE);
+// 
+	// Agregamos un fondo con origen en x:0 y:0
+	game.add.sprite(0,0, "sky");
 
-	// [Prueba] Agregando una estrella
-	// Usamos 'game.add.sprite()' para agregar el sprite en la posicion x:0 y:0
-	// Hacemos referencia a 'star'
-	game.add.sprite(0,0, "star");
+	// Agrupamos las plataformas
+	platforms = game.add.group();
+
+	// Activamos la física a lo que se encuentra dentro de plataforma
+	platforms.enableBody = true;
+
+	// Creamos el suelo
+	// 'game.world.height' accede al alto establecido en la variable game, que es instancia de Phaser.Game()
+
+	var ground = platforms.create(0, game.world.height - 64, "ground");
+
+	// Escalamos a 'ground' para que encaje en la parte de abajo
+	ground.scale.setTo(2,2);
+
+	// Inmovilizamos al suelo para que no se caiga cuando los objetos colisionen con ellos
+	ground.body.immovable = true;
+
+	// Ahora crearemos dos superficies flotantes
+	var ledge = platforms.create(400, 400, "ground");
+	ledge.body.immovable = true;
+
+	ledge = platforms.create(-150, 250, "ground");
+	ledge.body.immovable = true;
+
 
 }
 
